@@ -1,5 +1,5 @@
 # Progra-III-2022
-Códigos de la Catedra de Programación Computacional III - Computo II - 2022
+Códigos de la Catedra de Programación Computacional III - Ciclo II - 2022
 
 - Python para todos: https://duenaslerin.com/tico2/pdfs/python-para-todos.pdf
 - Python para todos, Python 3: http://do1.dr-chuck.com/pythonlearn/ES_es/pythonlearn.pdf 
@@ -10,7 +10,7 @@ Códigos de la Catedra de Programación Computacional III - Computo II - 2022
 # Requerimientos del proyecto final.
 * Equipos de trabajo - 3 Integrantes Maximo 4.
 * IA
-* Python como backend 
+* Python como backend (Web)
 * Base de datos SQL o NOSQL
 * Interfaz Grafica (Web) Dinámica e interactiva – Bootstrap u otro Framework
 
