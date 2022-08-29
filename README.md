@@ -10,7 +10,7 @@ Códigos de la Catedra de Programación Computacional III - Ciclo II - 2022
 # Requerimientos del proyecto final.
 * Equipos de trabajo - 3 Integrantes Maximo 4.
 * IA
-* Python como backend (Web)
+* Python como backend (Pagina Web)
 * Base de datos SQL o NOSQL
 * Interfaz Grafica (Web) Dinámica e interactiva – Bootstrap u otro Framework
 
