@@ -12,7 +12,7 @@ Códigos de la Catedra de Programación Computacional III - Ciclo II - 2022
 * IA
 * Python como backend (Pagina Web)
 * Base de datos SQL o NOSQL
-* Interfaz Grafica (Web) Dinámica e interactiva – Bootstrap u otro Framework
+* Interfaz Grafica (Web) Dinámica e interactiva – Bootstrap u otro Framework - API-REST FULL
 
 Ejm. de Proyectos Finales.
 * Sistema de votacion electronica (Elecciones presidenciales, alcaldes y diputados, Reinas de belleza, etc.) #IA para analizar los comentarios de los usuarios si son positivos o negativos y Login por reconocimiento facial, escaneo del DUI y foto facial para validacion de la persona.
