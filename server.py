@@ -12,6 +12,19 @@ import seaborn as sb
 temperaturas = pd.read_csv("grados.csv", sep=";")
 print(temperaturas["celsius"])
 
+#datos de entrada y salida
+celsius = temperaturas["celsius"]
+fahrenheit = temperaturas["fahrenheit"]
+
+#modelo de entrenamiento
+modelo = tf.keras.Sequential()
+modelo.add(tf.keras.layers.Dense(units=1, input_shape=[1]))
+
+#compilar elmodelo
+modelo.compile(optimizer=tf.keras.optimizers.Adam(1), loss='mean_squared_error')
+
+#entrenar el modelo
+epocas = modelo.fit(celsius, fahrenheit, epochs=100, verbose=1)
 
 class servidorBasico(SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -24,8 +37,12 @@ class servidorBasico(SimpleHTTPRequestHandler):
         data = self.rfile.read(longitud)
         data = data.decode()
         data = parse.unquote(data)
+        f = modelo.predict([data])
+    
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(data.encode())
         
-
 print("Server iniciado en el puerto ", port)
 server = HTTPServer(("localhost", port), servidorBasico)
 server.serve_forever()
