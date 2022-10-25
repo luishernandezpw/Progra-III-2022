@@ -6,10 +6,9 @@ port= 3000
 import tensorflow as tf
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sb
 
 #leer datos de entrenamiento
-temperaturas = pd.read_csv("grados.csv", sep=";")
+temperaturas = pd.read_csv("datos.csv", sep=";")
 print(temperaturas["celsius"])
 
 #datos de entrada y salida
@@ -24,7 +23,7 @@ modelo.add(tf.keras.layers.Dense(units=1, input_shape=[1]))
 modelo.compile(optimizer=tf.keras.optimizers.Adam(1), loss='mean_squared_error')
 
 #entrenar el modelo
-epocas = modelo.fit(celsius, fahrenheit, epochs=100, verbose=1)
+epocas = modelo.fit(celsius, fahrenheit, epochs=150, verbose=1)
 
 class servidorBasico(SimpleHTTPRequestHandler):
     def do_GET(self):
@@ -36,12 +35,12 @@ class servidorBasico(SimpleHTTPRequestHandler):
         longitud = int(self.headers["Content-Length"])
         data = self.rfile.read(longitud)
         data = data.decode()
-        data = parse.unquote(data)
+        data = float(parse.unquote(data))
         f = modelo.predict([data])
     
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(data.encode())
+        self.wfile.write(str(f[0][0]).encode())
         
 print("Server iniciado en el puerto ", port)
 server = HTTPServer(("localhost", port), servidorBasico)
