@@ -11,21 +11,43 @@
     crossorigin="anonymous">
 </head>
 <body>
-    <form id="frmConvertir">
+    <form id="frmAlumno">
         <div class="container">
-            <div class="row">
-                <div class="col col-md-1">
-                    <label for="txtgrados">
-                        CELSIUS
-                    </label>
-                </div>
-                <div class="col col-md-3">
-                    <input type="text" name="txtgrados" id="txtgrados" placeholder="grados"
-                        class="form-control ">                
-                </div>
-                <div class="col col-md-3">
-                    <input type="submit" value="CONVERTIR" class="btn btn-primary"/>
-                    <div id="divFharenheit" class="badge text-bg-success p-2">0 F</div>
+            <div class="card text-bg-secondary mb-3" >
+                <div class="card-header">Administracion de ALUMNOS</div>
+                <div class="card-body">
+                    <div class="row m-1">
+                        <div class="col">CODIGO</div>
+                        <div class="col col-md-2">
+                            <input class="form-control" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno">
+                        </div>
+                    </div>
+                    <div class="row m-1">
+                        <div class="col">NOMBRE</div>
+                        <div class="col col-md-4">
+                            <input class="form-control" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                        </div>
+                    </div>
+                    <div class="row m-1">
+                        <div class="col">DIRECCION</div>
+                        <div class="col col-md-5">
+                            <input class="form-control" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
+                        </div>
+                    </div>
+                    <div class="row m-1">
+                        <div class="col">TEL</div>
+                        <div class="col col-md-3">
+                            <input class="form-control" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-3">
+                            <input class="btn btn-primary" type="submit" value="GUARDAR">
+                        </div>
+                        <div class="col col-md-3">
+                            <input class="btn btn-warning" type="reset" value="NUEVO">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -34,13 +56,16 @@
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" 
         crossorigin="anonymous"></script>
     <script>
-        $("#frmConvertir").submit(e=>{
+        $("#frmAlumno").submit(e=>{
             e.preventDefault();
-            let celsius = $("#txtgrados").val();
+            let codigo = $("#txtCodigoAlumno").val(),
+                nombre = $("#txtNombreAlumno").val(),
+                direccion = $("#txtDireccionAlumno").val(),
+                telefono = $("#txtTelefonoAlumno").val();
             $.ajax({
                 url:'http://localhost:3000',
                 method:'POST',
-                data:celsius,
+                data:JSON.stringify({codigo, nombre, direccion, telefono}),
                 success: resp=>{
                     $("#divFharenheit").text(`${resp}F`);
                 }
