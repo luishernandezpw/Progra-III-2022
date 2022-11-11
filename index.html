@@ -52,15 +52,16 @@
         btn.addEventListener("click",event=>{
             event.preventDefault();
 
-            let codigo = document.querySelector("#txtCodigoAlumno").value,
+            let accion = "nuevo",
+                codigo = document.querySelector("#txtCodigoAlumno").value,
                 nombre = document.querySelector("#txtNombreAlumno").value,
                 direccion = document.querySelector("#txtDireccionAlumno").value,
                 telefono = document.querySelector("#txtTelefonoAlumno").value;
             //peticion AJAX
 
-            fetch("http://localhost:3000", {
+            fetch("http://localhost:3000/alumno", {
                 method: "POST",
-                body:JSON.stringify({codigo, nombre, direccion, telefono})
+                body:JSON.stringify({accion, codigo, nombre, direccion, telefono})
             }).then(response=>response.json())
             .then(respuesta=>{
                 
