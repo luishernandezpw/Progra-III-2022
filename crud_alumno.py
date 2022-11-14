@@ -1,8 +1,11 @@
 import conexion
 
-db = conexion.connection
+db = conexion.conexion()
 
 class crud_alumno:
+    def consultar_alumnos(self):
+        return db.consultar("select * from alumnos")
+        
     def administrar_alumnos(self, contenido):
         try:
             if contenido["accion"]=="nuevo":

@@ -8,6 +8,15 @@ class conexion:
             print("Conexion establecida con exito")
         else:
             print("Error al establcer la conexion")
+            
+    def consultar(self, sql):
+        try:
+            cursor = self.connection.cursor(dictionary=True)
+            cursor.execute(sql)
+            return cursor.fetchall()
+        except Exception as e:
+            return str(e)
+
     def ejecutar_consultas(self, sql, val):
         try:
             cursor = self.connection.cursor()

@@ -11,66 +11,128 @@
     crossorigin="anonymous">
 </head>
 <body>
-    <form id="frmAlumno">
-        <div class="container">
-            <div class="card text-bg-secondary mb-3" >
-                <div class="card-header">Administracion de ALUMNOS</div>
-                <div class="card-body">
-                    <div class="row m-1">
-                        <div class="col">CODIGO</div>
-                        <div class="col col-md-2">
-                            <input class="form-control" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno">
+    <div class="container">
+        <div class="row">
+            <div class="col col-md-6">
+                <form id="frmAlumno">
+                    <div class="card text-bg-secondary" >
+                        <div class="card-header">Administracion de ALUMNOS</div>
+                        <div class="card-body">
+                            <div class="row m-1">
+                                <div class="col-3 col-md-3">CODIGO</div>
+                                <div class="col-9 col-md-4">
+                                    <input required pattern="^[US|SM]{2}[IS|LI]{2}[0-9]{6,7}$" title="Ingrese e codigo" class="form-control" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno">
+                                </div>
+                            </div>
+                            <div class="row m-1">
+                                <div class="col-3 col-md-3">NOMBRE</div>
+                                <div class="col-9 col-md-7">
+                                    <input required title="Ingrese el nombre" class="form-control" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                                </div>
+                            </div>
+                            <div class="row m-1">
+                                <div class="col-3 col-md-3">DIRECCION</div>
+                                <div class="col-3 col-md-9">
+                                    <input required title="Ingrese la direccion" class="form-control" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
+                                </div>
+                            </div>
+                            <div class="row m-1">
+                                <div class="col-3 col-md-3">TEL</div>
+                                <div class="col-9 col-md-4">
+                                    <input class="form-control" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 col-md-3">
+                                    <input class="btn btn-primary" type="submit" value="GUARDAR">
+                                </div>
+                                <div class="col-3 col-md-3">
+                                    <input class="btn btn-warning" type="reset" value="NUEVO">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row m-1">
-                        <div class="col">NOMBRE</div>
-                        <div class="col col-md-4">
-                            <input class="form-control" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                </form>
+            </div>
+            <div class="col col-md-6">
+                <form id="frmBuscarAlumno">
+                    <div class="card text-bg-secondary" >
+                        <div class="card-header">BUSQUEDA DE ALUMNOS</div>
+                        <div class="card-body">
+                            <table class="table table-hover text-white" id="tblBusquedaAlumnos">
+                                <thead>
+                                    <tr>
+                                        <th colspan="4">
+                                            <input class="form-control" type="search" name="txtBuscarAlumno" id="txtBuscarAlumno" placeholder="buscar por codigo, nombre">
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>CODIGO</th>
+                                        <th>NOMBRE</th>
+                                        <th>DIRECCION</th>
+                                        <th>TEL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="row m-1">
-                        <div class="col">DIRECCION</div>
-                        <div class="col col-md-5">
-                            <input class="form-control" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
-                        </div>
-                    </div>
-                    <div class="row m-1">
-                        <div class="col">TEL</div>
-                        <div class="col col-md-3">
-                            <input class="form-control" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col col-md-3">
-                            <input class="btn btn-primary" type="submit" value="GUARDAR">
-                        </div>
-                        <div class="col col-md-3">
-                            <input class="btn btn-warning" type="reset" value="NUEVO">
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" 
         integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" 
         crossorigin="anonymous"></script>
     <script>
         $("#frmAlumno").submit(e=>{
             e.preventDefault();
-            let codigo = $("#txtCodigoAlumno").val(),
+            let accion = 'nuevo',
+                codigo = $("#txtCodigoAlumno").val(),
                 nombre = $("#txtNombreAlumno").val(),
                 direccion = $("#txtDireccionAlumno").val(),
                 telefono = $("#txtTelefonoAlumno").val();
             $.ajax({
-                url:'http://localhost:3000',
+                url:'http://localhost:3000/alumno',
                 method:'POST',
-                data:JSON.stringify({codigo, nombre, direccion, telefono}),
+                data:JSON.stringify({accion, codigo, nombre, direccion, telefono}),
                 success: resp=>{
-                    $("#divFharenheit").text(`${resp}F`);
+                    if( resp=="ok" ){
+                        $("#frmAlumno input[type=text]").val("");
+                        listarAlumnos();
+                    }
                 }
             })
         });
+        listarAlumnos();
+
+        function listarAlumnos(){
+            $.ajax({
+                url:'http://localhost:3000/alumno',
+                method:'GET',
+                type:'json',
+                success: data=>{
+                    let $tblBusquedaAlumnos = $("#tblBusquedaAlumnos > tbody"),
+                        filas = '';
+                    alumno = JSON.parse(data);
+                    alumno.forEach(item=>{
+                        filas += `
+                            <tr>
+                                <td>${item.codigo}</td>
+                                <td>${item.nombre}</td>
+                                <td>${item.direccion}</td>
+                                <td>${item.telefono}</td>
+                            </tr>
+                        `;
+                    });
+                    $tblBusquedaAlumnos.find("tr").remove();
+                    $tblBusquedaAlumnos.append(filas);
+                }
+            });
+        }
     </script>
 </body>
 </html>
