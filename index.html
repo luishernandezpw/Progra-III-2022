@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col col-md-6">
-                <form id="frmAlumno">
+                <form id="frmAlumno" data-accion="nuevo" data-idalumno="">
                     <div class="card text-bg-secondary" >
                         <div class="card-header">Administracion de ALUMNOS</div>
                         <div class="card-body">
@@ -90,7 +90,8 @@
     <script>
         $("#frmAlumno").submit(e=>{
             e.preventDefault();
-            let accion = 'nuevo',
+            let accion = $("#frmAlumno").data("accion"),
+                idAlumno = $("#frmAlumno").data("idalumno") || 0,
                 codigo = $("#txtCodigoAlumno").val(),
                 nombre = $("#txtNombreAlumno").val(),
                 direccion = $("#txtDireccionAlumno").val(),
@@ -98,9 +99,10 @@
             $.ajax({
                 url:'http://localhost:3000/alumno',
                 method:'POST',
-                data:JSON.stringify({accion, codigo, nombre, direccion, telefono}),
+                data:JSON.stringify({accion, idAlumno, codigo, nombre, direccion, telefono}),
                 success: resp=>{
                     if( resp=="ok" ){
+                        $("#frmAlumno").data("accion", "nuevo");
                         $("#frmAlumno input[type=text]").val("");
                         listarAlumnos();
                     }
@@ -120,11 +122,14 @@
                     alumno = JSON.parse(data);
                     alumno.forEach(item=>{
                         filas += `
-                            <tr>
+                            <tr onClick='modificarAlumno(${JSON.stringify(item)})'>
                                 <td>${item.codigo}</td>
                                 <td>${item.nombre}</td>
                                 <td>${item.direccion}</td>
                                 <td>${item.telefono}</td>
+                                <td>
+                                    <button onClick='eliminarAlumno(${JSON.stringify(item)})'>Eliminar</button>
+                                </td>
                             </tr>
                         `;
                     });
@@ -132,6 +137,25 @@
                     $tblBusquedaAlumnos.append(filas);
                 }
             });
+        }
+        function eliminarAlumno(alumno){
+            if( confirm(`Esta seguro de eliminar a ${alumno.nombre}`) ){
+                $.ajax({
+                    url: 'http://localhost:3000/alumno',
+                    data:json.stringify({accion:'eliminar', idAlumno:alumno.idAlumno}),
+                    success: resp=>{
+                        listarAlumnos();
+                    }
+                })
+            }
+        }
+        function modificarAlumno(alumno){
+            $("#frmAlumno").data("idalumno", alumno.idAlumno);
+            $("#txtCodigoAlumno").val(alumno.codigo)
+            $("#txtNombreAlumno").val(alumno.nombre);
+            $("#txtDireccionAlumno").val(alumno.direccion);
+            $("#txtTelefonoAlumno").val(alumno.telefono);
+            $("#frmAlumno").data("accion", "modificar");
         }
     </script>
 </body>
