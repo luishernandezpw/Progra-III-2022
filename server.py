@@ -9,7 +9,13 @@ class miServidor(SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path=="/":
             self.path = "index.html"
-        return SimpleHTTPRequestHandler.do_GET(self)
+            return SimpleHTTPRequestHandler.do_GET(self)
+            
+        if(self.path=="/alumno"):
+            resp = alumno.consultar()
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write( json.dumps(resp).encode() )
 
     def do_POST(self):
         lenc = int(self.headers["Content-Length"])

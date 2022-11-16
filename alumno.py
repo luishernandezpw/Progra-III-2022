@@ -5,6 +5,7 @@ miconexion = conexion.conexion()
 class alumno:
     def consultar(self):
         return miconexion.consultar("select * from alumnos")
+        
     def aministrar_alumnos(self, alumnos):
         if alumnos["accion"]=="nuevo":
             sql = """

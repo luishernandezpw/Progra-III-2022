@@ -9,50 +9,83 @@
 </head>
 <body>
     <div class="container">
-        <div class="card border-primary mb-3" style="max-width: 36rem;">
-            <div class="card-header">Administracion de Alumnos</div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col col-md-2">CODIGO</div>
-                    <div class="col col-md-2">
-                        <input class="form-control" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno">
+        <div class="row">
+            <div class="col-6">
+                <form id="frmAlumnos" data-accion="nuevo" data-idalumno="">
+                    <div class="card border-primary mb-3">
+                        <div class="card-header">Administracion de Alumnos</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-3 col-md-2">CODIGO</div>
+                                <div class="col-9 col-md-3">
+                                    <input required pattern="^[US|SM]{2}[IS|LI|LA]{2}[0-9]{6}$" title="Ingrese el codigo del estudiante" class="form-control" type="text" name="txtCodigoAlumno" id="txtCodigoAlumno">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 col-md-2">NOMBRE</div>
+                                <div class="col-9 col-md-5">
+                                    <input required pattern="[A-Za-záéíóúñÑü ]{3,65}" class="form-control" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 col-md-2">DIRECCION</div>
+                                <div class="col-9 col-md-6">
+                                    <input required class="form-control" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3 col-md-2">TEL</div>
+                                <div class="col-9 col-md-3">
+                                    <input required pattern="[0-9]{4}-[0-9]{4}" class="form-control" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 col-md-6">
+                                    <input id="btnGuardarAlumno" type="submit" value="Guardar" class="btn btn-primary">
+                                    <input id="btnNuevoAlumno" type="reset" value="Nuevo" class="btn btn-warning" />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col col-md-2">NOMBRE</div>
-                    <div class="col col-md-4">
-                        <input class="form-control" type="text" name="txtNombreAlumno" id="txtNombreAlumno">
+                </form>
+            </div>
+            <div class="col-6">
+                <form id="frmBuscarAlumnos">
+                    <div class="card border-primary mb-3">
+                        <div class="card-header">Busqueda de Alumnos</div>
+                        <div class="card-body">
+                            <table class="table table-hover" id="tblAlumnos">
+                                <thead>
+                                    <tr>
+                                        <td colspan="4">
+                                            <input type="search" id="txtBuscarAlumnos" class="form-control">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>CODIGO</th>
+                                        <th>NOMBRE</th>
+                                        <th>DIRECCION</th>
+                                        <th>TELEFONO</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col col-md-2">DIRECCION</div>
-                    <div class="col col-md-5">
-                        <input class="form-control" type="text" name="txtDireccionAlumno" id="txtDireccionAlumno">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-md-2">TEL</div>
-                    <div class="col col-md-2">
-                        <input class="form-control" type="text" name="txtTelefonoAlumno" id="txtTelefonoAlumno">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col col-md-6">
-                        <input id="btnGuardarAlumno" type="submit" value="Guardar" class="btn btn-primary">
-                        <input id="btnNuevoAlumno" type="reset" value="Nuevo" class="btn btn-warning" />
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
+        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        let btn = document.querySelector("#btnGuardarAlumno");
-        btn.addEventListener("click",event=>{
+        let frmAlumnos = document.querySelector("#frmAlumnos");
+        frmAlumnos.addEventListener("submit",event=>{
             event.preventDefault();
 
-            let accion = "nuevo",
+            let accion = event.target.dataset.accion,
+                idAlumno = event.target.dataset.idalumno,
                 codigo = document.querySelector("#txtCodigoAlumno").value,
                 nombre = document.querySelector("#txtNombreAlumno").value,
                 direccion = document.querySelector("#txtDireccionAlumno").value,
@@ -61,12 +94,47 @@
 
             fetch("http://localhost:3000/alumno", {
                 method: "POST",
-                body:JSON.stringify({accion, codigo, nombre, direccion, telefono})
-            }).then(response=>response.json())
+                body:JSON.stringify({accion, idAlumno, codigo, nombre, direccion, telefono})
+            }).then(response=>response.text())
             .then(respuesta=>{
-                
+                if( respuesta=="ok" ){
+                    frmAlumnos.dataset.accion = "nuevo";
+                    frmAlumnos.dataset.idalumno = "";
+                    document.querySelector("#txtCodigoAlumno").value = "";
+                    document.querySelector("#txtNombreAlumno").value = "";
+                    document.querySelector("#txtDireccionAlumno").value = "";
+                    document.querySelector("#txtTelefonoAlumno").value = "";
+                    listarAlumnos();
+                }
             });
         });
+        listarAlumnos();
+
+        function listarAlumnos(){
+            fetch('http://localhost:3000/alumno').then(response => response.json()).then(data=>{
+                let $tblAlumnos = document.querySelector("#tblAlumnos > tbody"),
+                    filas = '';
+                data.forEach(alumno=>{
+                    filas += `
+                        <tr onClick='modificarAlumno(${JSON.stringify(alumno)})'>
+                            <td>${alumno.codigo}</td>
+                            <td>${alumno.nombre}</td>
+                            <td>${alumno.direccion}</td>
+                            <td>${alumno.telefono}</td>
+                        </tr>
+                    `;
+                });
+                $tblAlumnos.innerHTML = filas;
+            });
+        }
+        function modificarAlumno(alumno){
+            frmAlumnos.dataset.accion = "modificar";
+            frmAlumnos.dataset.idalumno = alumno.idAlumno;
+            txtCodigoAlumno.value = alumno.codigo;
+            txtNombreAlumno.value = alumno.nombre;
+            txtDireccionAlumno.value = alumno.direccion;
+            txtTelefonoAlumno.value = alumno.telefono;
+        }
     </script>
 </body>
 </html>
