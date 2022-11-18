@@ -3,8 +3,8 @@ import conexion
 miconexion = conexion.conexion()
 
 class alumno:
-    def consultar(self):
-        return miconexion.consultar("select * from alumnos")
+    def consultar(self, data):
+        return miconexion.consultar("select * from alumnos where nombre like '%"+ data["nombre"] +"%'")
         
     def aministrar_alumnos(self, alumnos):
         if alumnos["accion"]=="nuevo":

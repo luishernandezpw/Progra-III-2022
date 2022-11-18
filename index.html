@@ -50,7 +50,7 @@
                 </form>
             </div>
             <div class="col-6">
-                <form id="frmBuscarAlumnos">
+                
                     <div class="card border-primary mb-3">
                         <div class="card-header">Busqueda de Alumnos</div>
                         <div class="card-body">
@@ -72,7 +72,7 @@
                             </table>
                         </div>
                     </div>
-                </form>
+               
             </div>
         </div>
         
@@ -108,10 +108,16 @@
                 }
             });
         });
+        let txtBuscarAlumnos = document.querySelector("#txtBuscarAlumnos");
+        txtBuscarAlumnos.addEventListener("keyup", event=>{
+            event.preventDefault();
+
+            listarAlumnos(txtBuscarAlumnos.value);
+        });
         listarAlumnos();
 
-        function listarAlumnos(){
-            fetch('http://localhost:3000/alumno').then(response => response.json()).then(data=>{
+        function listarAlumnos(valor=''){
+            fetch(`http://localhost:3000/alumno?nombre=${valor}`).then(response => response.json()).then(data=>{
                 let $tblAlumnos = document.querySelector("#tblAlumnos > tbody"),
                     filas = '';
                 data.forEach(alumno=>{
@@ -121,11 +127,25 @@
                             <td>${alumno.nombre}</td>
                             <td>${alumno.direccion}</td>
                             <td>${alumno.telefono}</td>
+                            <td><button onClick='eliminarAlumno(${JSON.stringify(alumno)})' class="btn btn-danger">Eliminar</button>
                         </tr>
                     `;
                 });
                 $tblAlumnos.innerHTML = filas;
             });
+        }
+        function eliminarAlumno(alumno){
+            if(confirm(`Esta seguro de eliminar a ${alumno.nombre}`)){
+                let accion="eliminar",
+                    idAlumno = alumno.idAlumno;
+                fetch('http://localhost:3000/alumno',{
+                    method: 'POST',
+                    body:JSON.stringify({accion,idAlumno})
+                }).then(response => response.text())
+                .then(resp=>{
+                    listarAlumnos();
+                });
+            }
         }
         function modificarAlumno(alumno){
             frmAlumnos.dataset.accion = "modificar";

@@ -12,7 +12,13 @@ class miServidor(SimpleHTTPRequestHandler):
             return SimpleHTTPRequestHandler.do_GET(self)
             
         if(self.path=="/alumno"):
-            resp = alumno.consultar()
+            len = int(self.headers["Content-Length"])
+            data = self.rfile.read(len)
+            data = data.decode()
+            data = parse.unquote(data)
+            data = json.loads(data)
+
+            resp = alumno.consultar(data)
             self.send_response(200)
             self.end_headers()
             self.wfile.write( json.dumps(resp).encode() )
